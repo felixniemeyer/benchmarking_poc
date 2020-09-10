@@ -25,8 +25,8 @@ Collaborative benchmarking consists of 2 key components
 1. **context** in which **people** are coming together with a **common goal**
 2. **KV data**: people entering data that can be benchmarked; which usually means the provided data
    is structured as follows:
-   - compared are `key, value` tuples
-   - the keys are user-defined
+   - compared are `attribute, value` tuples
+   - the `attribute`s are user-defined
    - the provided value is context-specific
 
 ### Implementation Details
@@ -35,7 +35,8 @@ We propose
 
 - As much as possible happens in the browser, so that it can run
   everywhere and can also be visualized.
-- The JS library (JIFF)[https://github.com/multiparty/jiff/] is used to perform secure multi-party computation
+- The JS library (https://github.com/multiparty/jiff/) is used 
+  to perform secure multi-party computation
 - We have a React / Next.js frontend glueing it all together
 
 ### Version 1: Static, 3 person data room
@@ -86,20 +87,17 @@ As an interested party,
   I expect to participate in the process
 - each of the `n` fellows gets its benchmarking result as before (ranking from `1..n`)
 
-### Version 4: Data Keys
+### Version 4: Customizable Data Attributes
 
-Up to version 3, only 1 `key, value` pair was used per party implicitly.
+Up to version 3, only 1 `attribute, value` pair was used per party implicitly.
 With version 4, we are changing this...
 
 As an interested party
 
 - while I create a new data room,
-  - I can also specify how many `key, value` pairs I want to benchmark myself
-    against others
-  - and upon selecting this, I can give each key a proper name such that
-    everyone is comparing apples with apples
+  - I /must/ enter the attribute names (1 for each `attribute, value` that I want benchmarking to against)
 - after doing creating such a room, each fellow
-  - sees a list of `keys` and can enter a value for each `key`
+  - sees a list of `attribute` names and can enter a value for each `attribute`
   - and can then submit this list once it is completed
 
 ### Version 5: More Stats :p
