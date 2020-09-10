@@ -5,7 +5,7 @@ sharing. It provides immediate value and requires only small effort on the
 data collection side.
 
 With appropriate encryption technology in place, it is also a great show case
-for SINE ideas around data sharing and collaboration that maximes souveranity
+for SINE ideas around data sharing and collaboration that maximes sovereignty
 for the parties involved.
 
 ## Project Vision
@@ -47,7 +47,7 @@ data with 2 other people; that is
 - you can open a webpage
 - enter a private integer value
 - wait for other 2 parties to do the same
-- and after every other party has entered and commited their value, each
+- and after every other party has entered and committed their value, each
   party can see how she/he ranks among the others.
 
 #### Example
