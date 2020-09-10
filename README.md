@@ -5,7 +5,7 @@ sharing. It provides immediate value and requires only small effort on the
 data collection side.
 
 With appropriate encryption technology in place, it is also a great show case
-for SINE ideas around data sharing and collaboration that maximes sovereignty
+for SINE ideas around data sharing and collaboration that maximizes sovereignty
 for the parties involved.
 
 ## Project Vision
