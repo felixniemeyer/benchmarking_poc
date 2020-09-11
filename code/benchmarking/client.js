@@ -3,6 +3,8 @@
  * This file has UI handlers.
  */
 
+var start_time;
+
 // eslint-disable-next-line no-unused-vars
 function connect() {
   $('#connectButton').prop('disabled', true);
@@ -55,6 +57,7 @@ function submit() {
     $('#button').attr('disabled', true);
     $('#output').append('<p>Starting...</p>');
     // eslint-disable-next-line no-undef
+    start_time = Date.now();
     var promise = mpc.computeCompare(input);
     promise.then(handleResult);
   }
@@ -65,5 +68,8 @@ function handleResult(result) {
     return el != null;
   });
   $('#output').append('<p>Result is: ' + filtered + '</p>');
+
+  var runtime = Date.now() - start_time;
+  $('#runtime').append('<p>Seconds elapsed: ' + Math.floor(runtime / 1000) + '</p>');
   $('#button').attr('disabled', false);
 }

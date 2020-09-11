@@ -15,7 +15,7 @@ There're 2 approaches based on JIFF template app.
 1. With sorting (merge sort) and then matching who’s value where in the sorted list. At the moment this way doesn't support proper ranking when several values being equal. (`computeWithSort`)
 2. Direct rank calculation comparing everyone to everyone. (`computeCompare`)
 
-To choose which one to use you need to change function name in `client.js:58`.
+To choose which one to use you need to change function name in `client.js:61`.
 
 ## Legal inputs
 
