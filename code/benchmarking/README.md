@@ -32,7 +32,7 @@ To run it you need jiff repo pulled in the same directory as this repo. It's bec
 
 1. Running a server:
     ```shell
-    node demos/benchmarking/server.js
+    node server.js
     ```
 
 2. Either open browser based parties by going to *http://localhost:8080/client.html* in the browser, or a node.js party by running
