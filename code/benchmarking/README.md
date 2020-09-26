@@ -18,42 +18,40 @@ To choose which one to use you need to change function name in `src/client.vue`.
 This instantiation of benchmarking only supports positive integer inputs.
 
 ## Setup
-0. Clone the [JIFF repo](https://github.com/multiparty/jiff) in the same directory as this repository. We don't use the jiff module from npm, because it's out of date.
+1. Clone the [JIFF repo](https://github.com/multiparty/jiff) in the same directory as this repository. We don't use the jiff module from npm, because it's out of date.
 
 1. Install dependencies
-```shell
-npm install
-```
+	```shell
+	npm install
+	```
 
 2. Run webpack (only if you want to use the web client) 
-```shell
+	```shell
 	npm run webpack-dev
-```
-for development or 
-```shell
+	```
+	for development or 
+	```shell
 	npm run webpack-prod
-```
+	```
 for production
 
 ## Manual walkthrough
 
-0. Run the server:
-    ```shell
-    node server.js
-    ```
-
-1. Per Participant you either 
-  1. Open a web client: *http://localhost:8080/* in the browser
-  2. Or use the `party.js` script by running
-    ```shell
-    node party.js <input> [<party count> [<computation_id> [<party id>]]]]'
-    ```
+1. Run a server:
+	```shell
+	node server.js
+	```
+2. Per Participant you either 
+	1. Open a web client: *http://localhost:8080/* in the browser or
+	2. Use the `party.js` script by running
+		```shell
+		node party.js <input> [<party count> [<computation_id> [<party id>]]]
+		```
 
 ## Testing 
-
-    ```shell
-    npm test
-    ```
+```shell
+npm test
+```
 Note that you *do not* need to have the server running when running the tests; they run the server on their own.
 
 ## File structure
