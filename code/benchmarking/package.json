@@ -2,9 +2,23 @@
   "name": "benchmarking-mpc",
   "version": "0.0.1",
   "description": "Benchmaprking pmc",
-  "directories": {},
-  "dependencies": {},
+  "scripts": {
+    "webpack-dev": "npx webpack --config webpack-dev.js",
+    "webpack-prod": "npx webpack --config webpack-prod.js",
+    "test": "mocha"
+  },
   "devDependencies": {
-    "express": "^4.16.3"
+    "chai": "^4.2.0",
+    "css-loader": "^4.3.0",
+    "express": "^4.16.3",
+    "mocha": "^8.1.3",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^10.0.2",
+    "vue": "^2.6.12",
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-merge": "^5.1.4"
   }
 }
