@@ -18,7 +18,7 @@
 		<h1>Benchmarking each other under MPC</h1>
 		Input Number (between 0 and 100)
 		<input v-model="value" pattern="[0-9]+"> 
-		<button v-on:click="submit" :disabled="computing">Rank me!</button><br/>
+		<button v-on:click="submit" :disabled="!connected || computing">Rank me!</button><br/>
 
 		<div>
 			<h1>Output</h1>
@@ -35,10 +35,8 @@
 import mpc from "../mpc.js"
 
 function getHostname() {
-	console.log("hi")
-	console.log("asd: " + window.location.hostname)
-	var hostname = window.location.hostname.trim()
-	var port = window.location.port
+	let hostname = window.location.hostname.trim()
+	let port = window.location.port
 	if (port == null || port === '') {
 		port = '80'
 	}
@@ -68,7 +66,6 @@ export default {
 		}
 	}, 
 	created: function() {
-		console.log("hey!")
 	},
 	methods: {
 		log: function(msg, type) {
@@ -79,8 +76,10 @@ export default {
 		},
 		connect: function(event) {
 			this.output = [] // clear log
-			let partyCount = parseInt(this.partyCount)
-			let zp = parseInt(this.zp)
+
+			let partyCount = parseInt(Number(this.partyCount))
+			let zp = parseInt(Number(this.zp))
+
 			if (isNaN(partyCount) || isNaN(zp)) {
 				this.logError("Party count and Zp must be integers!")
 			} else {
@@ -92,14 +91,12 @@ export default {
 					this.connected = true
 					this.log("All parties Connected")
 				}
-				console.log("connect", getHostname(), this.computationId, options)
 				mpc.connect(getHostname(), this.computationId, options)
 				this.log("Waiting for peers to connect") 
-				console.log(this.computationId)
 			}
 		},
 		submit: function() {
-			let value = parseInt(this.value)
+			let value = parseInt(Number(this.value))
 
 			if (isNaN(value)) {
 				this.logError("Input a valid number!")
@@ -107,19 +104,17 @@ export default {
 				this.logError("Input a WHOLE number between 0 and 100!")
 			} else {
 				this.log('Waiting for others & starting computation...')
-				console.log("value: ", value, typeof(value))
 				this.computing = true
 				this.startTime = Date.now()
 				mpc.computeCompare(value)
 					.then(this.handleResult)
 					.catch(err => this.logError(err))
-				console.log("at least reached this point") 
 			}
 		},
 		handleResult: function(result) {
-			var filtered = result.filter(el => el != null)
+			let filtered = result.filter(el => el != null)
 			this.log("Result is: " + filtered)
-			this.runtime = Date.now() - start_time
+			this.runtime = Date.now() - this.start_time
 			this.computing = false
 		}
 	}
