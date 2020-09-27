@@ -27,13 +27,13 @@ This instantiation of benchmarking only supports positive integer inputs.
 
 2. Run webpack (only if you want to use the web client) 
 	```shell
-	npm run webpack-dev
+	npm run dev
 	```
 	for development or 
 	```shell
-	npm run webpack-prod
+	npm run build
 	```
-for production
+	for production
 
 ## Manual walkthrough
 
