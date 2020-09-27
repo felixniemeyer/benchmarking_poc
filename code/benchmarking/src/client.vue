@@ -33,7 +33,6 @@
 
 <script>
 import mpc from "../mpc.js"
-var start_time
 
 function getHostname() {
 	console.log("hi")
