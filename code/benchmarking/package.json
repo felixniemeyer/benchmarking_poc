@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npx webpack --config webpack-prod.js",
     "dev": "npx webpack --config webpack-dev.js",
+	"serve": "node server.js", 
     "test": "mocha"
   },
   "devDependencies": {

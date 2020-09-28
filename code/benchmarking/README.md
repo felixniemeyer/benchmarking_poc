@@ -39,7 +39,7 @@ This instantiation of benchmarking only supports positive integer inputs.
 
 1. Run a server:
 	```shell
-	node server.js
+	npm run serve
 	```
 2. Per Participant you either 
 	1. Open a web client: *http://localhost:8080/* in the browser or

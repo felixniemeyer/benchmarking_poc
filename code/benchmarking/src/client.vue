@@ -1,128 +1,178 @@
 <template>
-	<div class="client">
+	<div class="client container">
+		<section class="hero">
+			<div class="hero-body">
+				<h1 class="title">
+					Benchmarking MPC
+				</h1>
+				<h2 class="subtitle">
+					proof of concept
+				</h2>
+			</div>
+		</section>
 
-		<h1>Connect to JIFF</h1>
-		Computation ID
-		<input v-model="computationId">
-		<br/><br/>
-		Zp (defines max value to compare)
-		<input v-model="zp">
-		<br/><br/>
-		Party Count 
-		<input v-model="partyCount" pattern="[0-9]+"> 
-		<button v-on:click="connect" :disabled="connected">Connect</button>
-		<br/>
+		<div class="box">
+			<h4 class="title is-4">Connect to a JIFF party</h4>
+			<b-field label="Computation Type">
+				<b-select v-model="newParty.type" placeholder="Select a name">
+					<option
+						v-for="(computationType, key) in computationTypes"
+						:value="computationType"
+						:key="key">
+						{{ computationType }}
+					</option>
+				</b-select>
+			</b-field>
+			<b-field grouped>
+				<b-field label="Computation ID">
+					<b-input v-model="newParty.computationId"></b-input>
+				</b-field>
 
-		connected!
-		<hr/>
-		<h1>Benchmarking each other under MPC</h1>
-		Input Number (between 0 and 100)
-		<input v-model="value" pattern="[0-9]+"> 
-		<button v-on:click="submit" :disabled="!connected || computing">Rank me!</button><br/>
+				<b-field label="Maximally allowed value (Zp)">
+					<b-input v-model="newParty.zp" ></b-input>
+				</b-field>
 
-		<div>
-			<h1>Output</h1>
-			<p v-for="(line, i) in output" :key="i" v-bind:class="[line.type]">{{line.msg}}</p>
+				<b-field label="Party Count" >
+					<b-input v-model="newParty.partyCount"></b-input>
+				</b-field>
+			</b-field>
+			<b-button type="is-primary" v-on:click="connect" :disabled="!inputValid">Connect to party</b-button>
+			<p v-if="inputHint !== undefined" class="has-text-danger">{{inputHint}}</p>
 		</div>
-		<div v-if="runtime">
-			<h1>Runtime</h1>	
-			<p>Seconds elapsed: {{runtime}}</p>
+		<hr/>
+
+		<div class="box">
+			<h4 class="title is-4">Parties</h4>
+			<p v-if="parties.length == 0">use the above form to connect to parties...</p>
+			<b-collapse
+				class="card"
+				animation="slide"
+				v-for="(party, key) of parties"
+				:key="key"
+				:open="expandedParty == key"
+				@open="expandedParty = key">
+				<div
+					slot="trigger"
+					slot-scope="props"
+					class="card-header"
+					role="button">
+					<p class="card-header-title">
+						{{ party.computationId }}
+					</p>
+					
+					<p class="card-header-icon">
+						<b-button size="is-small" type="is-danger" v-on:click.stop="removeParty(key)">Remove</b-button>
+					</p>
+				</div>
+				<div class="card-content">
+					<Party :parameters="party"/>
+					<div class="content">
+						{{ parties.text }}
+					</div>
+				</div>
+			</b-collapse>
 		</div>
 	</div>
 </template>
 
 <script>
-import mpc from "../mpc.js"
+import Party from './party.vue'
 
-function getHostname() {
-	let hostname = window.location.hostname.trim()
-	let port = window.location.port
-	if (port == null || port === '') {
-		port = '80'
-	}
-	if (!(hostname.startsWith('http://') || hostname.startsWith('https://'))) {
-		hostname = 'http://' + hostname
-	}
-	if (hostname.endsWith('/')) {
-		hostname = hostname.substring(0, hostname.length-1)
-	}
-	if (hostname.indexOf(':') > -1 && hostname.lastIndexOf(':') > hostname.indexOf(':')) {
-		hostname = hostname.substring(0, hostname.lastIndexOf(':'))
-	}
-	return hostname + ':' + port
+const partyDefaults = {
+	type: 'ranking', 
+	computationId: 'test',
+	zp: 11,
+	partyCount: 2,
 }
 
 export default {
 	data: function() {
 		return {
-			connected: false, 
-			computationId: 'test',
-			zp: 11,
-			partyCount: 2,
+			computationTypes: [
+				'ranking'
+			],
+			nextPartyKey: 0,
+			
+			newParty: { 
+				...partyDefaults
+			},
+
 			value: undefined, 
 			computing: false, 
 			runtime: undefined, 
-			output: []
+			output: [],
+
+			inputHint: undefined, 
+
+			//accordion
+			expandedParty: 0,
+			parties: {
+			}
 		}
 	}, 
 	created: function() {
 	},
-	methods: {
-		log: function(msg, type) {
-			this.output.push( { msg, type: "info" } )
-		},
-		logError: function(msg, type) {
-			this.output.push( { msg, type: "error" } )
-		},
-		connect: function(event) {
-			this.output = [] // clear log
-
-			let partyCount = parseInt(Number(this.partyCount))
-			let zp = parseInt(Number(this.zp))
-
-			if (isNaN(partyCount) || isNaN(zp)) {
-				this.logError("Party count and Zp must be integers!")
-			} else {
-				let options = { party_count: partyCount, Zp: zp }
-				options.onError = (_, error) => { 
-					this.logError("Jiff server error: " + error) 
-				}
-				options.onConnect = () => {
-					this.connected = true
-					this.log("All parties Connected")
-				}
-				mpc.connect(getHostname(), this.computationId, options)
-				this.log("Waiting for peers to connect") 
-			}
-		},
-		submit: function() {
-			let value = parseInt(Number(this.value))
-
-			if (isNaN(value)) {
-				this.logError("Input a valid number!")
-			} else if (100 < value || value < 0 || value !== Math.floor(value)) {
-				this.logError("Input a WHOLE number between 0 and 100!")
-			} else {
-				this.log('Waiting for others & starting computation...')
-				this.computing = true
-				this.startTime = Date.now()
-				mpc.computeCompare(value)
-					.then(this.handleResult)
-					.catch(err => this.logError(err))
-			}
-		},
-		handleResult: function(result) {
-			let filtered = result.filter(el => el != null)
-			this.log("Result is: " + filtered)
-			this.runtime = Date.now() - this.start_time
-			this.computing = false
+	computed: {
+		inputValid: function() { //TODO: something is broken
+			return this.parseInput() !== undefined
 		}
+	},
+	methods: {
+		connect: function(event) {
+			let parameters = this.parseInput()
+			console.log(parameters)
+			if (parameters !== undefined) {
+				this.expandedParty = this.nextPartyKey
+				this.parties[this.nextPartyKey++] = parameters
+				this.newParty = {
+					...partyDefaults
+				}
+				this.newParty.computationId += "" + (this.nextPartyKey)
+			}
+		},
+		parseInput: function() {
+			this.inputHint = undefined
+			for(let input of [
+					this.newParty.partyCount, 
+					this.newParty.zp, 
+					this.newParty.computationId
+				]) {
+				if(input == '') {
+					this.inputHint = "no field may be empty"
+					return undefined
+				}
+			}
+			let partyCount = parseInt(Number(this.newParty.partyCount))
+			let zp = parseInt(Number(this.newParty.zp))
+			let computationId = this.newParty.computationId
+			for(let key in this.parties) {
+				let party = this.parties[key]
+				console.log("checking party ", party) 
+				if(party.computationId == computationId) {
+					this.inputHint = "you cannot participate in the same party twice"
+					return undefined
+				}
+			}
+			if (!isNaN(partyCount) && !isNaN(zp)) {
+				return {
+					computationId,
+					zp,
+					partyCount
+				}
+			} else {
+				this.inputHint = "party count and zp must be integers" 
+				return undefined
+			}			
+		},
+		removeParty: function(key) {
+			this.$delete(this.parties, key)
+		}
+	},
+	components: {
+		Party
 	}
 }
 </script>
 
 <style lang="scss">
-.error {
-	color: #ff0000;
-}
 </style>
