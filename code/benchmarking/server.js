@@ -1,22 +1,52 @@
-var path = require('path')
-var express = require('express')
-var http = require('http')
+const path = require('path')
+const express = require('express')
+const http = require('http')
+const commandLineArgs = require('command-line-args')
+const commandLineUsage = require('command-line-usage')
 
-//Serve static files
-let app = express();
-app.use('/', express.static(path.join(__dirname, 'dist')))
+const optionDefinitions = [
+  { name: 'port', alias: 'p', type: Number, defaultOption: 8080 }, 
+  { name: 'help', alias: 'h', type: Boolean }, 
+]
 
-server = http.Server(app) 
+function printUsage() { 
+  console.log(commandLineUsage({
+    header: "Usage",
+    optionList: optionDefinitions
+  }))
+}
 
-// Start jiff server
-var JIFFServer = require('../../../jiff/lib/jiff-server.js')
-new JIFFServer(server, { logs: true });
+function runServers() {
+  //Serve static files
+  let app = express();
+  app.use('/', express.static(path.join(__dirname, 'dist')))
 
-server.listen(8080, function() {
-	console.log("listening on *:8080")
-})
+  server = http.Server(app) 
 
+  // Start jiff server
+  var JIFFServer = require('../../../jiff/lib/jiff-server.js')
+  new JIFFServer(server, { logs: true });
 
-// info
-console.log('Direct your browser to http://localhost:8080/client.html.')
-console.log('To run a node.js based party: node party <input> \n')
+  server.listen(options.port, function() {
+    console.log(`listening on ${options.port}`)
+  })
+
+  // info
+  console.log(`Direct your browser to http://localhost:${options.port}/client.html.`)
+  console.log('To run a node.js based party: node party <input> \n')
+}
+
+let options
+try {
+  options = commandLineArgs(optionDefinitions)
+  if(options.help) {
+    printUsage()
+  } else {
+    runServers()
+  }
+  
+} catch(e) {
+  console.log("failed to parse arguments: ", e.toString() ) 
+  printUsage()
+}
+
