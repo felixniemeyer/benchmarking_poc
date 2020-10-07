@@ -5,12 +5,14 @@
   "scripts": {
     "build": "npx webpack --config webpack-prod.js",
     "dev": "npx webpack --config webpack-dev.js",
-	"serve": "node server.js", 
+    "serve": "node server.js",
     "test": "mocha"
   },
   "devDependencies": {
     "buefy": "^0.9.3",
     "chai": "^4.2.0",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0",
     "css-loader": "^4.3.0",
     "express": "^4.16.3",
     "mocha": "^8.1.3",
