@@ -5,7 +5,7 @@ const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
 
 const optionDefinitions = [
-  { name: 'port', alias: 'p', type: Number, defaultOption: 8080 }, 
+  { name: 'port', alias: 'p', type: Number, defaultValue: 8080 }, 
   { name: 'help', alias: 'h', type: Boolean }, 
 ]
 
