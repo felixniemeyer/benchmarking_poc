@@ -13,7 +13,10 @@
 
 		<div class="box">
 			<h4 class="title is-4">Connect to a JIFF party</h4>
-			<b-field label="Computation Type">
+			<b-field label="Jiff server">
+				<b-input v-model="newParty.jiffServer"></b-input>
+			</b-field>
+			<b-field label="Computation type">
 				<b-select v-model="newParty.type" placeholder="Select a name">
 					<option
 						v-for="(computationType, key) in computationTypes"
@@ -78,11 +81,30 @@
 <script>
 import Party from './party.vue'
 
+function getHostname() {
+	let hostname = window.location.hostname.trim()
+	let port = window.location.port
+	if (port == null || port === '') {
+		port = '80'
+	}
+	if (!(hostname.startsWith('http://') || hostname.startsWith('https://'))) {
+		hostname = 'http://' + hostname
+	}
+	if (hostname.endsWith('/')) {
+		hostname = hostname.substring(0, hostname.length-1)
+	}
+	if (hostname.indexOf(':') > -1 && hostname.lastIndexOf(':') > hostname.indexOf(':')) {
+		hostname = hostname.substring(0, hostname.lastIndexOf(':'))
+	}
+	return hostname + ':' + port
+}
+
 const partyDefaults = {
 	type: 'ranking', 
 	computationId: 'test',
 	zp: 11,
 	partyCount: 2,
+	jiffServer: getHostname()
 }
 
 export default {
@@ -155,6 +177,7 @@ export default {
 			}
 			if (!isNaN(partyCount) && !isNaN(zp)) {
 				return {
+					jiffServer: this.newParty.jiffServer,
 					computationId,
 					zp,
 					partyCount
