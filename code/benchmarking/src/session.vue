@@ -1,5 +1,5 @@
 <template>
-	<div class="party content has-background-color-dark">
+	<div class="session content has-background-color-dark">
 
 	<div class="columns">
 		<div class="column">

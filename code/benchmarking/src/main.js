@@ -3,9 +3,9 @@ import Buefy from 'buefy'
 import './style.scss'
 Vue.use(Buefy)
 
-import Client from './client.vue' 
+import App from './app.vue' 
 
 let vm = new Vue({
 	el: '#app',
-	render: h => h(Client) 
+	render: h => h(App),
 })

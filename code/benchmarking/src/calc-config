@@ -1,0 +1,34 @@
+<template>
+	<section>
+		<b-field grouped>
+			<b-field label="Name">
+				<b-input v-model="config.name"></b-input>
+			</b-field>
+		</b-field>
+	</section>
+</template>
+
+<script>
+export default {
+	data: function() {
+		return {
+		}
+	}, 
+	props: {
+		config: Object	
+	},
+	created: function() {
+	},
+	methods: {
+	}
+}
+</script>
+
+<style lang="scss">
+
+.content .logLine:not(:last-child), 
+.logLine, {
+	margin: 0px;
+	font-family: monospace; 
+}
+</style>
