@@ -1,13 +1,8 @@
 <template>
 	<section>
-		<b-field grouped>
-			<b-field label="Jiff server">
-				<b-input v-model="jiffServer"></b-input>
-			</b-field>
-			<b-field label="Pary ID">
-				<b-input v-model="computationId"></b-input>
-			</b-field>
-		</b-field>
+		<Connector
+			v-bind:connectionConfig="connectionConfig"
+			/>
 		<b-field>
 			<b-button type="is-primary" v-on:click="join">
 				Join session
@@ -17,20 +12,21 @@
 </template>
 
 <script>
+import Connector from "./connector.vue"
+
 export default {
 	data: function() {
 		return {
-			jiffServer: '', 
-			computationId: ''
+			connectionConfig: {}
 		}
 	}, 
 	methods: {
 		join: function() {
-			this.$emit('join', {
-				jiffServer: this.jiffServer, 
-				computationId: this.computationId
-			})
+			this.$emit("join", this.connectionConfig)
 		}
+	},
+	components: {
+		Connector
 	}
 }
 </script>

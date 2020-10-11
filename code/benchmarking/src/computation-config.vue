@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import RankingConfig from './computations/ranking.vue'
-import AvgConfig from './computations/ranking.vue'
-import MedianConfig from './computations/ranking.vue'
+import RankingConfig from "./computations/ranking.vue"
+import AvgConfig from "./computations/ranking.vue"
+import MedianConfig from "./computations/ranking.vue"
 
 export default {
 	data: function() {

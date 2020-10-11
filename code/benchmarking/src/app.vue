@@ -41,7 +41,6 @@
 				@open="expandedSession = key">
 				<div
 					slot="trigger"
-					slot-scope="props"
 					class="card-header"
 					role="button">
 					<p class="card-header-title">
@@ -73,77 +72,53 @@
 </template>
 
 <script>
-import Builder from './builder.vue'
-import Joiner from './joiner.vue'
-import Session from './session.vue'
-
-function getHostname() {
-	let hostname = window.location.hostname.trim()
-	let port = window.location.port
-	if (port == null || port === '') {
-		port = '80'
-	}
-	if (!(hostname.startsWith('http://') || hostname.startsWith('https://'))) {
-		hostname = 'http://' + hostname
-	}
-	if (hostname.endsWith('/')) {
-		hostname = hostname.substring(0, hostname.length-1)
-	}
-	if (hostname.indexOf(':') > -1 && hostname.lastIndexOf(':') > hostname.indexOf(':')) {
-		hostname = hostname.substring(0, hostname.lastIndexOf(':'))
-	}
-	return hostname + ':' + port
-}
+import Builder from "./builder.vue"
+import Joiner from "./joiner.vue"
+import Session from "./session.vue"
 
 const DEBUG = false
 const sessionDefaults = DEBUG ? {
-  "inputs": [
-    {
-      "name": "Revenue",
-      "type": "Number"
-    },
-    {
-      "name": "Profit / Employee",
-      "type": "Decimal"
-    },
-    {
-      "name": "Industry",
-      "type": "Enum"
-    }
-  ],
-  "computations": [
-    {
-      "type": "median",
-      "parameters": {
-        "inputs": {
-          "toBeRanked": "Revenue"
-        },
-        "zp": "11"
-      },
-      "title": "Median Revenue"
-    },
-    {
-      "type": "avg",
-      "parameters": {
-        "inputs": {
-          "toBeRanked": "Profit / Employee"
-        },
-        "zp": "11"
-      },
-      "title": "Median Profit per Employee"
-    }
-  ]
+	"inputs": [
+		{
+			"name": "Revenue",
+			"type": "Number"
+		},
+		{
+			"name": "Profit / Employee",
+			"type": "Decimal"
+		},
+		{
+			"name": "Industry",
+			"type": "Enum"
+		}
+	],
+	"computations": [
+		{
+			"type": "median",
+			"parameters": {
+				"inputs": {
+					"toBeRanked": "Revenue"
+				},
+				"zp": "11"
+			},
+			"title": "Median Revenue"
+		},
+		{
+			"type": "avg",
+			"parameters": {
+				"inputs": {
+					"toBeRanked": "Profit / Employee"
+				},
+				"zp": "11"
+			},
+			"title": "Median Profit per Employee"
+		}
+	]
 } : {
 	inputs: [
 	],
 	computations: [
 	]
-	/*
-	type: 'ranking', 
-	computationId: 'test',
-	zp: 11,
-	partyCount: 2,
-	jiffServer: getHostname() */
 }
 
 export default {
@@ -176,7 +151,8 @@ export default {
 		}
 	},
 	methods: {
-		createSession: function(event) {
+		createSession: function(connectionConfig) {
+			console.log("creating session", this.newSessionConfig, "on", connectionConfig)
 			//TODO: the idea of having 1 person create the party and x other persons join the session requires some work on the "server" side (may as well be implemented p2p immediately). A "sessionConfig" has to be passed around. 
 			let parameters = this.parseInput()
 			console.log(parameters)
@@ -189,17 +165,18 @@ export default {
 				this.newSessionConfig.computationId += "" + (this.nextSessionKey)
 			}
 		},
-		joinSession: function(joinInfo) {
+		joinSession: function(connectionConfig) {
+			console.log("joining session on", connectionConfig)
 			//TODO: implement
 		},
 		parseInput: function() {
 			this.inputHint = undefined
 			for(let input of [
-					this.newSessionConfig.partyCount, 
-					this.newSessionConfig.zp, 
-					this.newSessionConfig.computationId
-				]) {
-				if(input == '') {
+				this.newSessionConfig.partyCount, 
+				this.newSessionConfig.zp, 
+				this.newSessionConfig.computationId
+			]) {
+				if(input == "") {
 					this.inputHint = "no field may be empty"
 					return undefined
 				}

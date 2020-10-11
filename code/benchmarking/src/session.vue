@@ -37,7 +37,7 @@ export default {
 		parameters: Object
 	},
 	created: function() {
-		console.log('parameters', this.parameters)
+		console.log("parameters", this.parameters)
 		this.connect()
 	},
 	methods: {
@@ -50,7 +50,7 @@ export default {
 		logSuccess: function(msg) {
 			this.log.push( { msg, cssClass: "has-text-success" } )
 		},
-		connect: function(event) {
+		connect: function() {
 			let options = { 
 				party_count: this.parameters.partyCount, 
 				Zp: this.parameters.zp
@@ -74,7 +74,7 @@ export default {
 			} else if (this.parameters.zp < value || value < 0 || value !== Math.floor(value)) {
 				this.logError(`Input a WHOLE number between 0 and ${this.parameters.zp}!`)
 			} else {
-				this.logInfo('Waiting for others & starting computation...')
+				this.logInfo("Waiting for others & starting computation...")
 				this.startTime = Date.now()
 				mpc.computeCompare(value)
 					.then(this.handleResult)

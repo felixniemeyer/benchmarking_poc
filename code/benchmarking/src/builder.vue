@@ -1,5 +1,8 @@
 <template>
 	<div class="content">
+		<Connector
+			v-bind:connectionConfig="connectionConfig"
+			/>
 		<b-field label="Party count" >
 			<b-input v-model="sessionConfig.partyCount"></b-input>
 		</b-field>
@@ -77,13 +80,15 @@
 </template>
 
 <script>
-import InputConfig from './input-config.vue'
-import ComputationConfig from './computation-config.vue'
+import InputConfig from "./input-config.vue"
+import ComputationConfig from "./computation-config.vue"
+import Connector from "./connector.vue"
 
 export default {
 	data: function() {
 		return {
-			showJSON: false
+			showJSON: false,
+			connectionConfig: {}
 		}
 	}, 
 	props: {
@@ -99,16 +104,17 @@ export default {
 				parameters: {
 					inputs: {},
 				},
-				title: '',
+				title: "",
 			})
 		},
 		create: function() {
-			this.$emit("create")
+			this.$emit("create", this.connectionConfig)
 		},
 	}, 
 	components: {
 		InputConfig, 
 		ComputationConfig, 
+		Connector
 	}
 }
 </script>

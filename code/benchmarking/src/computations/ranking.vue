@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import InputSelector from './input-selector.vue'
+import InputSelector from "./input-selector.vue"
 
 export default {
 	data: function() {
