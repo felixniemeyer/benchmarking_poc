@@ -60,6 +60,15 @@
 				</div>
 			</b-collapse>
 		</div>
+
+		<footer class="footer">
+			<div class="content has-text-centered">
+				<p>
+					<strong>MPC dashboard</strong> by 
+					<a href="https://sine.foundation/">SINE</a>
+				</p>
+			</div>
+		</footer>
 	</div>
 </template>
 
@@ -86,7 +95,45 @@ function getHostname() {
 	return hostname + ':' + port
 }
 
-const sessionDefaults = {
+const DEBUG = false
+const sessionDefaults = DEBUG ? {
+  "inputs": [
+    {
+      "name": "Revenue",
+      "type": "Number"
+    },
+    {
+      "name": "Profit / Employee",
+      "type": "Decimal"
+    },
+    {
+      "name": "Industry",
+      "type": "Enum"
+    }
+  ],
+  "computations": [
+    {
+      "type": "median",
+      "parameters": {
+        "inputs": {
+          "toBeRanked": "Revenue"
+        },
+        "zp": "11"
+      },
+      "title": "Median Revenue"
+    },
+    {
+      "type": "avg",
+      "parameters": {
+        "inputs": {
+          "toBeRanked": "Profit / Employee"
+        },
+        "zp": "11"
+      },
+      "title": "Median Profit per Employee"
+    }
+  ]
+} : {
 	inputs: [
 	],
 	computations: [

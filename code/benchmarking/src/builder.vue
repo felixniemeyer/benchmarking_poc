@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<div class="content">
 		<b-field label="Party count" >
 			<b-input v-model="sessionConfig.partyCount"></b-input>
 		</b-field>
@@ -10,7 +10,7 @@
 		<InputConfig
 			v-for="(input, key) of sessionConfig.inputs" 
 			:key="'input'+key"
-			
+			v-bind:inputConfig="input"
 			/>
 		<b-field>
 			<b-button type="is-secondary" v-on:click="addInput">
@@ -25,6 +25,7 @@
 			v-for="(computation, key) of sessionConfig.computations" 
 			:key="'computation'+key"
 			v-bind:computationConfig="computation"
+			v-bind:inputs="sessionConfig.inputs.map(i => i.name)"
 			/>
 		<b-field>
 			<b-button type="is-secondary" v-on:click="addComputation">
@@ -72,7 +73,7 @@
 				<b-input v-model="newParty.partyCount"></b-input>
 			</b-field>
 		</b-field> -->
-	</section>
+	</div>
 </template>
 
 <script>
@@ -88,22 +89,21 @@ export default {
 	props: {
 		sessionConfig: Object	
 	},
-	created: function() {
-	},
 	methods: {
 		addInput: function() {
 			this.sessionConfig.inputs.push({})
 		},
 		addComputation: function() {
 			this.sessionConfig.computations.push({
-				type: '',
-				parameters: {},
+				type: undefined,
+				parameters: {
+					inputs: {},
+				},
 				title: '',
-				description: ''
 			})
 		},
 		create: function() {
-			this.$emit("createSession")
+			this.$emit("create")
 		},
 	}, 
 	components: {
