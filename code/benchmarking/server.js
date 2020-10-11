@@ -8,6 +8,7 @@ const optionDefinitions = [
   { name: 'port', alias: 'p', type: Number, defaultValue: 8080 }, 
   { name: 'help', alias: 'h', type: Boolean }, 
 ]
+let options
 
 function printUsage() { 
   console.log(commandLineUsage({
@@ -29,14 +30,10 @@ function runServers() {
 
   server.listen(options.port, function() {
     console.log(`listening on ${options.port}`)
+    console.log(`serving statically from dist`)
   })
-
-  // info
-  console.log(`Direct your browser to http://localhost:${options.port}/client.html.`)
-  console.log('To run a node.js based party: node party <input> \n')
 }
 
-let options
 try {
   options = commandLineArgs(optionDefinitions)
   if(options.help) {
